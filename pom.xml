@@ -10,7 +10,29 @@
     <packaging>maven-plugin</packaging>
 
     <name>Gherkin-Interpreted-Nicely</name>
-    <url>https://github.com/andreashosbach/gin</url>
+    <description>Formatting Gherkin files nicely and integrating the test results from Cucumber.</description>
+    <url>https://github.com/andreashosbach/gin-maven</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Andreas Hosbach</name>
+            <email>andreas.hosbach@gmail.com</email>
+            <organizationUrl>http://www.github.com/andreashosbach</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/andreashosbach/gin-maven.git</connection>
+        <developerConnection>scm:git:ssh://github.com:andreashosbach/gin-maven.git</developerConnection>
+        <url>http://github.com/andreashosbach/gin-maven</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,7 +58,8 @@
             <artifactId>cucumber-java</artifactId>
             <version>5.1.3</version>
             <scope>test</scope>
-        </dependency>        <dependency>
+        </dependency>
+        <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit</artifactId>
             <version>5.1.3</version>
