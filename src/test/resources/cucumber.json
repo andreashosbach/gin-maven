@@ -1,0 +1,64 @@
+[
+  {
+    "line": 3,
+    "elements": [
+      {
+        "start_timestamp": "2019-11-20T09:27:55.321Z",
+        "before": [
+          {
+            "result": {
+              "duration": 17885700,
+              "status": "passed"
+            },
+            "match": {
+              "location": "CucumberContext.setup(Scenario)"
+            }
+          }
+        ],
+        "line": 18,
+        "name": "Scenario Name",
+        "description": "",
+        "id": "scenario-name-id",
+        "after": [
+          {
+            "result": {
+              "duration": 186599,
+              "status": "passed"
+            },
+            "match": {
+              "location": "CucumberContext.teardown()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Szenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 213700,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "Step description text",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Step parameter",
+                  "offset": 4
+                }
+              ],
+              "location": "SharedSteps.step_description_text(Object)"
+            },
+            "keyword": "Gegeben sei "
+          }
+        ]
+      }
+    ],
+    "name": "Feature Name",
+    "description": "Feature description \n over several lines",
+    "id": "feature-name-id",
+    "keyword": "Funktionalität",
+    "uri": "file:src/test/resources/features/feature-name.feature",
+    "tags": []
+  }
+]

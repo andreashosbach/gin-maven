@@ -1,0 +1,13 @@
+target
+.metadata
+.settings
+.classpath
+.project
+*.iml
+*.bak
+
+**/.idea/*
+!.idea/codeStyles/codeStyleConfig.xml
+!.idea/runConfigurations
+!.idea/copyright
+

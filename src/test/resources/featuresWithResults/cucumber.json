@@ -1,0 +1,237 @@
+[
+  {
+    "line": 1,
+    "elements": [
+      {
+        "start_timestamp": "2020-02-06T16:52:29.333Z",
+        "line": 3,
+        "name": "Successful Scenario",
+        "description": "",
+        "id": "some-scenarios-with-results;successful-scenario",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 1093500,
+              "status": "passed"
+            },
+            "line": 4,
+            "name": "a correct precondition",
+            "match": {
+              "location": "CucumberStepdefs.aCorrectPrecondition()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 5,
+            "name": "an action happened",
+            "match": {
+              "location": "CucumberStepdefs.anActionHappened()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 6,
+            "name": "an assertion holds",
+            "match": {
+              "location": "CucumberStepdefs.anAssertionHolds()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      },
+      {
+        "start_timestamp": "2020-02-06T16:52:29.371Z",
+        "line": 8,
+        "name": "Failed Scenario",
+        "description": "",
+        "id": "some-scenarios-with-results;failed-scenario",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 9,
+            "name": "a correct precondition",
+            "match": {
+              "location": "CucumberStepdefs.aCorrectPrecondition()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 10,
+            "name": "an action happened",
+            "match": {
+              "location": "CucumberStepdefs.anActionHappened()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "error_message": "java.lang.AssertionError\r\n\tat org.junit.Assert.fail(Assert.java:87)\r\n\tat org.junit.Assert.assertTrue(Assert.java:42)\r\n\tat org.junit.Assert.assertTrue(Assert.java:53)\r\n\tat CucumberStepdefs.anAssertionFails(CucumberStepdefs.java:22)\r\n\tat ✽.an assertion fails(file:///C:/Users/anho/IdeaProjects/gin/src/test/resources/features/featuresWithResults/featuresWithResults.feature:11)\r\n",
+              "duration": 1994000,
+              "status": "failed"
+            },
+            "line": 11,
+            "name": "an assertion fails",
+            "match": {
+              "location": "CucumberStepdefs.anAssertionFails()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      },
+      {
+        "start_timestamp": "2020-02-06T16:52:29.379Z",
+        "line": 19,
+        "name": "Successful Scenario Outline",
+        "description": "",
+        "id": "some-scenarios-with-results;successful-scenario-outline;;2",
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 14,
+            "name": "a correct precondition",
+            "match": {
+              "location": "CucumberStepdefs.aCorrectPrecondition()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 15,
+            "name": "an action happened",
+            "match": {
+              "location": "CucumberStepdefs.anActionHappened()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 16,
+            "name": "an assertion holds",
+            "match": {
+              "location": "CucumberStepdefs.anAssertionHolds()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      },
+      {
+        "start_timestamp": "2020-02-06T16:52:29.380Z",
+        "line": 27,
+        "name": "Failed Scenario Outline",
+        "description": "",
+        "id": "some-scenarios-with-results;failed-scenario-outline;;2",
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 22,
+            "name": "a correct precondition",
+            "match": {
+              "location": "CucumberStepdefs.aCorrectPrecondition()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 23,
+            "name": "an action happened",
+            "match": {
+              "location": "CucumberStepdefs.anActionHappened()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 24,
+            "name": "an assertion holds",
+            "match": {
+              "location": "CucumberStepdefs.anAssertionHolds()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      },
+      {
+        "start_timestamp": "2020-02-06T16:52:29.382Z",
+        "line": 28,
+        "name": "Failed Scenario Outline",
+        "description": "",
+        "id": "some-scenarios-with-results;failed-scenario-outline;;3",
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 22,
+            "name": "a correct precondition",
+            "match": {
+              "location": "CucumberStepdefs.aCorrectPrecondition()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "status": "passed"
+            },
+            "line": 23,
+            "name": "an action happened",
+            "match": {
+              "location": "CucumberStepdefs.anActionHappened()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "error_message": "java.lang.AssertionError\r\n\tat org.junit.Assert.fail(Assert.java:87)\r\n\tat org.junit.Assert.assertTrue(Assert.java:42)\r\n\tat org.junit.Assert.assertTrue(Assert.java:53)\r\n\tat CucumberStepdefs.anAssertionFails(CucumberStepdefs.java:22)\r\n\tat ✽.an assertion fails(file:///C:/Users/anho/IdeaProjects/gin/src/test/resources/features/featuresWithResults/featuresWithResults.feature:24)\r\n",
+              "status": "failed"
+            },
+            "line": 24,
+            "name": "an assertion fails",
+            "match": {
+              "location": "CucumberStepdefs.anAssertionFails()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      }
+    ],
+    "name": "Some Scenarios with results",
+    "description": "",
+    "id": "some-scenarios-with-results",
+    "keyword": "Feature",
+    "uri": "file:src/test/resources/features/featuresWithResults/featuresWithResults.feature",
+    "tags": []
+  }
+]
