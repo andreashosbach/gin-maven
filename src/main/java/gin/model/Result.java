@@ -1,4 +1,7 @@
 package gin.model;
 
-public class Result {
+public enum Result {
+    PASSED(),
+    FAILED(),
+    IGNORED();
 }

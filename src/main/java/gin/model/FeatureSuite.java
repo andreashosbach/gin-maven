@@ -1,5 +1,7 @@
 package gin.model;
 
+import com.google.common.collect.ImmutableList;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,5 +65,9 @@ public class FeatureSuite {
 
     public String getApplicationVersion(){
         return applicationVersion;
+    }
+
+    public List<FeatureFile> getFeatureFiles(){
+        return ImmutableList.copyOf(featureFiles);
     }
 }

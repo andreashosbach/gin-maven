@@ -2,8 +2,10 @@ package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
 import gin.cucumberjson.TestResultIntegrator;
+import gin.featuresjson.FeaturesJsonFactory;
 import gin.featuresjson.FeaturesJsonWrapper;
 import gin.featuresjson.TestResultSummarizer;
+import gin.model.FeatureSuite;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -43,8 +45,10 @@ public class GinMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             setLogLevel();
+            FeatureSuite featureSuite = FeatureSuite.fromPath(featureFiles);
+            FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
+            FeaturesJsonWrapper fWrapper = featuresJsonFactory.buildFeaturesJsonWrapper();
 
-            FeaturesJsonWrapper fWrapper = FeaturesJsonWrapper.fromPath(featureFiles);
             fWrapper.Configuration.SutName = project.getName();
             fWrapper.Configuration.SutVersion = project.getVersion();
             logger.info("Read feature files");

@@ -2,10 +2,8 @@ package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
 import gin.cucumberjson.TestResultIntegrator;
-import gin.featuresjson.Feature;
-import gin.featuresjson.FeatureFile;
-import gin.featuresjson.FeaturesJsonWrapper;
-import gin.featuresjson.Scenario;
+import gin.featuresjson.*;
+import gin.model.FeatureSuite;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,9 +22,11 @@ public class TestResultIntegratorTest {
         //Given
         String featureDirectory = TestResultIntegratorTest.class.getResource("/featuresWithResults").getFile();
         featureDirectory = featureDirectory.replaceFirst("/", "");
-
-        FeaturesJsonWrapper featuresJson = FeaturesJsonWrapper.fromPath(featureDirectory);
+        FeatureSuite featureSuite = FeatureSuite.fromPath(featureDirectory);
+        FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
+        FeaturesJsonWrapper featuresJson = featuresJsonFactory.buildFeaturesJsonWrapper();
         String resultFile = TestResultIntegratorTest.class.getResource("/featuresWithResults/cucumber.json").getFile();
+
         resultFile = resultFile.replaceFirst("/", "");
         CucumberJsonWrapper cucumberJson = CucumberJsonWrapper.fromFile(resultFile);
 

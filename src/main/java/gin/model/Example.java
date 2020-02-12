@@ -1,8 +1,10 @@
 package gin.model;
 
+import com.google.common.collect.ImmutableList;
 import io.cucumber.messages.Messages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Example {
@@ -11,13 +13,13 @@ public class Example {
     private List<List<String>> dataRows = new ArrayList<>();
     private List<Integer> dataRowLines = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
-    private String nativeKeyword;
+    private String keyword;
 
     public static Example fromGherkin(Messages.GherkinDocument.Feature.Scenario.Examples example) {
         Example pExample = new Example();
         pExample.name = example.getName();
         example.getTagsList().stream().forEachOrdered(t -> pExample.tags.add(t.getName()));
-        pExample.nativeKeyword = example.getKeyword().trim();
+        pExample.keyword = example.getKeyword().trim();
 
         Messages.GherkinDocument.Feature.TableRow header = example.getTableHeader();
         header.getCellsList().stream().forEachOrdered(c -> pExample.headerRow.add(c.getValue()));
@@ -29,5 +31,29 @@ public class Example {
             pExample.dataRowLines.add(row.getLocation().getLine());
         }
         return pExample;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public List<String> getHeaders() {
+        return headerRow;
+    }
+
+    public List<List<String>> getDataRows() {
+        return dataRows;
+    }
+
+    public List<Integer> getDataRowLines(){
+        return ImmutableList.copyOf(dataRowLines);
     }
 }

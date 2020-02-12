@@ -2,8 +2,10 @@ package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
 import gin.cucumberjson.TestResultIntegrator;
+import gin.featuresjson.FeaturesJsonFactory;
 import gin.featuresjson.FeaturesJsonWrapper;
 import gin.featuresjson.TestResultSummarizer;
+import gin.model.FeatureSuite;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -21,7 +23,9 @@ public class GinCLI {
         String testResultFile = arg[1];
         String outputDirectory = arg[2];
 
-        FeaturesJsonWrapper fWrapper = FeaturesJsonWrapper.fromPath(featureFiles);
+        FeatureSuite featureSuite = FeatureSuite.fromPath(featureFiles);
+        FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
+        FeaturesJsonWrapper fWrapper = featuresJsonFactory.buildFeaturesJsonWrapper();
 
         CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(testResultFile);
         TestResultIntegrator testResultIntegrator = new TestResultIntegrator(fWrapper);

@@ -45,4 +45,11 @@ public class FeatureFile {
         return gherkin.toString();
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public Feature getFeature(){
+        return feature;
+    }
 }

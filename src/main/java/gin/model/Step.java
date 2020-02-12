@@ -19,4 +19,12 @@ public class Step {
         pStep.text = step.getText();
         return pStep;
     }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public String getText() {
+        return text;
+    }
 }
