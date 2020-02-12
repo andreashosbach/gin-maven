@@ -49,15 +49,21 @@ public class GinMojo extends AbstractMojo {
             fWrapper.Configuration.SutVersion = project.getVersion();
             logger.info("Read feature files");
 
-            CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(resultFile);
-            new TestResultIntegrator(fWrapper).integrateFromCucumberJson(testResult);
-            new TestResultSummarizer(fWrapper).summarize();
-            logger.info("Integrated test results");
+            if(resultFile != null && resultFile.isEmpty()) {
+                try {
+                    CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(resultFile);
+                    new TestResultIntegrator(fWrapper).integrateFromCucumberJson(testResult);
+                    new TestResultSummarizer(fWrapper).summarize();
+                    logger.info("Integrated test results");
+                } catch (IOException e) {
+                    logger.severe(e.getMessage());
+                }
+            }
 
             String featuresJson = fWrapper.asFeaturesJson();
             FileUtils.copyFromJar("html", Paths.get(outputDirectory));
             FileUtils.saveToFile(featuresJson, outputDirectory + File.separator + "html" + File.separator + "features.js");
-            logger.info("Succefully wrote output to: '" + outputDirectory + "'");
+            logger.info("Successfully wrote output to: '" + outputDirectory + "'");
 
             System.out.println("Generated Living Documentation at: '" + outputDirectory + File.separator + "html'");
         } catch (IOException | URISyntaxException e) {

@@ -24,7 +24,6 @@ public class FeatureFile {
     public Result Result;
 
     public static FeatureFile fromFile(File file, String basePath) throws IOException {
-        List<String> paths = singletonList(file.getAbsolutePath());
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line;
         StringBuilder gherkin = new StringBuilder();

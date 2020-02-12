@@ -15,6 +15,9 @@ public class CucumberJsonWrapper {
 
         public static CucumberJsonWrapper fromFile(String filename) throws IOException {
                 StringBuilder contentBuilder = new StringBuilder();
+                if(!Files.exists(Paths.get(filename))){
+                        throw new IOException("File not found " + filename);
+                }
                 try (Stream<String> stream = Files.lines(Paths.get(filename), StandardCharsets.UTF_8)) {
                         stream.forEach(s -> contentBuilder.append(s).append("\n"));
                 }
