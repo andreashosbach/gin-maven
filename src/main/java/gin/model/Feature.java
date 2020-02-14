@@ -6,6 +6,11 @@ import io.cucumber.messages.Messages;
 import java.util.ArrayList;
 import java.util.List;
 
+import static gin.model.Result.PASSED;
+import static gin.model.Result.FAILED;
+import static gin.model.Result.IGNORED;
+import static gin.model.Result.UNKNOWN;
+
 public class Feature {
     private String name;
     private String description;
@@ -13,6 +18,7 @@ public class Feature {
     private List<String> tags = new ArrayList<>();
     private Background background;
     private List<FeatureElement> scenarios = new ArrayList<>();
+    private String featureFileName;
 
     public static Feature fromGherkin(Messages.GherkinDocument.Feature feature) {
         Feature pFeature = new Feature();
@@ -58,5 +64,27 @@ public class Feature {
 
     public String getLanguage() {
         return language;
+    }
+
+    public FeatureElement getScenario(String name){
+        return scenarios.stream().filter(s -> name.equals(s.getName())).findFirst().get();
+    }
+
+    public void setFeatureFileName(String featureFileName) {
+        this.featureFileName = featureFileName;
+    }
+
+    public String getFeatureFileName() {
+        return featureFileName;
+    }
+
+    public Result getResult() {
+        if(scenarios.size() == 0){
+            return UNKNOWN;
+        }
+
+        return scenarios.stream()
+                .map(s -> s.getResult())
+                .reduce(PASSED, (l,r) -> l.add(r) );
     }
 }

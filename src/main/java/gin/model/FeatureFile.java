@@ -9,14 +9,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 public class FeatureFile {
-    private String filePath;
-    private String relativePath;
-    private Feature feature;
 
-    public static FeatureFile fromFile(File file, String basePath) throws IOException {
+    public static Feature fromFile(File file, String basePath) throws IOException {
 
         Parser<Messages.GherkinDocument.Builder> parser = new Parser<>(new GherkinDocumentBuilder(new IdGenerator() {
             @Override
@@ -26,12 +22,10 @@ public class FeatureFile {
         }));
         Messages.GherkinDocument doc = parser.parse(readFile(file)).build();
 
-        FeatureFile pFeatures = new FeatureFile();
-        pFeatures.filePath = file.getCanonicalPath();
-        pFeatures.feature = Feature.fromGherkin(doc.getFeature());
-        pFeatures.relativePath = Paths.get(basePath).relativize(Paths.get(file.getCanonicalPath())).toString();
+        Feature pFeature  = Feature.fromGherkin(doc.getFeature());
+        pFeature.setFeatureFileName(file.getCanonicalPath());
 
-        return pFeatures;
+        return pFeature;
     }
 
     private static String readFile(File file) throws IOException {
@@ -43,13 +37,5 @@ public class FeatureFile {
             gherkin.append("\n");
         }
         return gherkin.toString();
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public Feature getFeature(){
-        return feature;
     }
 }

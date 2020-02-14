@@ -5,13 +5,12 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeatureElement {
+public abstract class FeatureElement {
     private String name;
     private String description;
     private Location location;
     private List<String> tags = new ArrayList<>();
     private List<Step> steps = new ArrayList<>();
-    private Result result;
 
     public String getName() {
         return name;
@@ -53,7 +52,6 @@ public class FeatureElement {
         return location;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
-    }
+    public abstract Result getResult();
+
 }

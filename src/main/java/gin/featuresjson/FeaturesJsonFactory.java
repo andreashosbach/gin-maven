@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static gin.model.Result.*;
+
 public class FeaturesJsonFactory {
     private FeatureSuite featureSuite;
 
@@ -20,7 +22,7 @@ public class FeaturesJsonFactory {
         FeaturesJsonWrapper jsonWrapper = new FeaturesJsonWrapper();
         jsonWrapper.Features = new ArrayList<>();
 
-        featureSuite.getFeatureFiles().stream().forEachOrdered(f -> jsonWrapper.Features.add(createFeatureFile(f)));
+        featureSuite.getFeatures().stream().forEachOrdered(f -> jsonWrapper.Features.add(createFeatureFile(f)));
 
         jsonWrapper.Configuration = gin.featuresjson.Configuration.create("GIN", "1.0");
 
@@ -35,12 +37,12 @@ public class FeaturesJsonFactory {
         return jsonWrapper;
     }
 
-    private FeatureFile createFeatureFile(gin.model.FeatureFile featureFile) {
+    private FeatureFile createFeatureFile(gin.model.Feature feature) {
         FeatureFile pFeatures = new FeatureFile();
-        pFeatures.filePath = featureFile.getFilePath();
-        pFeatures.RelativeFolder = Paths.get(featureSuite.getBasePath()).relativize(Paths.get(featureFile.getFilePath())).toString();
-        pFeatures.Feature = createFeature(featureFile.getFeature());
-        pFeatures.Result = new Result();
+        pFeatures.filePath = feature.getFeatureFileName();
+        pFeatures.RelativeFolder = Paths.get(featureSuite.getBasePath()).relativize(Paths.get(feature.getFeatureFileName())).toString();
+        pFeatures.Feature = createFeature(feature);
+        pFeatures.Result = createResult(feature.getResult());
 
         return pFeatures;
     }
@@ -56,7 +58,7 @@ public class FeaturesJsonFactory {
             pFeature.Background = createBackground(feature.getBackground());
         }
         feature.getScenarios().stream().forEachOrdered(c -> pFeature.FeatureElements.add(createScenario(c)));
-        pFeature.Result = new Result();
+        pFeature.Result = createResult(feature.getResult());
         pFeature.Tags = new ArrayList<>();
         feature.getTags().stream().forEachOrdered(t -> pFeature.Tags.add(t));
         return pFeature;
@@ -69,7 +71,7 @@ public class FeaturesJsonFactory {
         pScenario.Slug = UUID.randomUUID().toString();
         pScenario.Steps = new ArrayList<>();
         featureElement.getSteps().stream().forEachOrdered(s -> pScenario.Steps.add(createStep(s)));
-        pScenario.Result = new Result();
+        pScenario.Result = createResult(featureElement.getResult());
         pScenario.Tags = new ArrayList<>();
         featureElement.getTags().stream().forEachOrdered(t -> pScenario.Tags.add(t));
 
@@ -87,7 +89,7 @@ public class FeaturesJsonFactory {
         Background pBackground = new Background();
         pBackground.Name = background.getName();
         pBackground.Description = background.getDescription();
-        pBackground.Result = new Result();
+        pBackground.Result = createResult(background.getResult());
         pBackground.Tags = new ArrayList<>();
         pBackground.Steps = new ArrayList<>();
         background.getSteps().stream().forEachOrdered(s -> pBackground.Steps.add(createStep(s)));
@@ -129,4 +131,20 @@ public class FeaturesJsonFactory {
 
         return pExample;
     }
+
+    private Result createResult(gin.model.Result result) {
+        Result pResult = new Result();
+        if (result == null) {
+            pResult.WasExecuted = false;
+            pResult.WasProvided = false;
+            pResult.WasSuccessful = false;
+        } else {
+            pResult.WasExecuted = (result != IGNORED) && (result != UNKNOWN);
+            pResult.WasProvided = (result != UNKNOWN);
+            pResult.WasSuccessful = (result == PASSED);
+        }
+        return pResult;
+    }
+
+
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ScenarioOutline extends FeatureElement {
     private List<Example> examples = new ArrayList<>();
+    private Result result;
 
     public static ScenarioOutline fromGherkin(Messages.GherkinDocument.Feature.Scenario scenario) {
         ScenarioOutline pScenario = new ScenarioOutline();
@@ -24,4 +25,12 @@ public class ScenarioOutline extends FeatureElement {
     public List<Example> getExamples() {
         return ImmutableList.copyOf(examples);
     }
+
+    public void setResult(Result result){
+        this.result = result;
+    }
+    public Result getResult(){
+        return result;
+    }
+
 }

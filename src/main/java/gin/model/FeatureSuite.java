@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeatureSuite {
-    private List<FeatureFile> featureFiles = new ArrayList<>();
+    private List<Feature> features = new ArrayList<>();
     private String applicationName;
     private String applicationVersion;
     private String basePath;
@@ -19,7 +19,7 @@ public class FeatureSuite {
 
         List<File> featureFiles = listAllFeatureFilesInPath(featureFilePath);
         for (File file : featureFiles) {
-            featureSuite.featureFiles.add(FeatureFile.fromFile(file, featureFilePath));
+            featureSuite.features.add(FeatureFile.fromFile(file, featureFilePath));
         }
 
         return featureSuite;
@@ -67,7 +67,12 @@ public class FeatureSuite {
         return applicationVersion;
     }
 
-    public List<FeatureFile> getFeatureFiles(){
-        return ImmutableList.copyOf(featureFiles);
+    public List<Feature> getFeatures(){
+        return ImmutableList.copyOf(features);
     }
+
+    public Feature getFeature(String name){
+        return features.stream().filter(f -> name.equals(f.getName())).findFirst().get();
+    }
+
 }

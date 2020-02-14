@@ -3,6 +3,8 @@ package gin.model;
 import io.cucumber.messages.Messages;
 
 public class Scenario extends FeatureElement {
+    private Result result;
+
     public static Scenario fromGherkin(Messages.GherkinDocument.Feature.Scenario scenario) {
         Scenario pScenario = new Scenario();
         pScenario.setName(scenario.getName());
@@ -13,5 +15,12 @@ public class Scenario extends FeatureElement {
         pScenario.setLocation(Location.fromGherkin(scenario.getLocation()));
 
         return pScenario;
+    }
+
+    public void setResult(Result result){
+        this.result = result;
+    }
+    public Result getResult(){
+        return result;
     }
 }

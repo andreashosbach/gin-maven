@@ -1,7 +1,7 @@
 package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
-import gin.cucumberjson.TestResultIntegrator;
+import gin.cucumberjson.ModelTestResultIntegrator;
 import gin.featuresjson.FeaturesJsonFactory;
 import gin.featuresjson.FeaturesJsonWrapper;
 import gin.featuresjson.TestResultSummarizer;
@@ -46,23 +46,23 @@ public class GinMojo extends AbstractMojo {
         try {
             setLogLevel();
             FeatureSuite featureSuite = FeatureSuite.fromPath(featureFiles);
-            FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
-            FeaturesJsonWrapper fWrapper = featuresJsonFactory.buildFeaturesJsonWrapper();
-
-            fWrapper.Configuration.SutName = project.getName();
-            fWrapper.Configuration.SutVersion = project.getVersion();
             logger.info("Read feature files");
 
             if(resultFile != null && resultFile.isEmpty()) {
                 try {
                     CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(resultFile);
-                    new TestResultIntegrator(fWrapper).integrateFromCucumberJson(testResult);
-                    new TestResultSummarizer(fWrapper).summarize();
+                    new ModelTestResultIntegrator(featureSuite).integrateFromCucumberJson(testResult);
                     logger.info("Integrated test results");
                 } catch (IOException e) {
                     logger.severe(e.getMessage());
                 }
             }
+
+            FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
+            FeaturesJsonWrapper fWrapper = featuresJsonFactory.buildFeaturesJsonWrapper();
+            fWrapper.Configuration.SutName = project.getName();
+            fWrapper.Configuration.SutVersion = project.getVersion();
+            new TestResultSummarizer(fWrapper).summarize();
 
             String featuresJson = fWrapper.asFeaturesJson();
             FileUtils.copyFromJar("html", Paths.get(outputDirectory));

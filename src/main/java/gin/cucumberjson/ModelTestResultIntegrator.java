@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static gin.model.Result.UNKNOWN;
+
 public class ModelTestResultIntegrator {
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -19,23 +21,23 @@ public class ModelTestResultIntegrator {
     }
 
     public void integrateFromCucumberJson(CucumberJsonWrapper cucumberJson) {
-        for (FeatureFile feature : featureSuite.getFeatureFiles()) {
+        for (Feature feature : featureSuite.getFeatures()) {
             TestFile fileResult = findFileResult(cucumberJson, feature);
             integrateFeatureResults(fileResult, feature);
         }
     }
 
-    private void integrateFeatureResults(TestFile fileResult, FeatureFile feature) {
+    private void integrateFeatureResults(TestFile fileResult, Feature feature) {
         if (fileResult == null) {
             return;
         }
 
-        if (feature.getFeature().getBackground() != null) {
-            TestCase caseResult = findBackgroundResult(fileResult, feature.getFeature().getBackground());
-            integrateBackgroundResults(caseResult, feature.getFeature().getBackground());
+        if (feature.getBackground() != null) {
+            TestCase caseResult = findBackgroundResult(fileResult, feature.getBackground());
+            integrateBackgroundResults(caseResult, feature.getBackground());
         }
 
-        for (FeatureElement featureElement : feature.getFeature().getScenarios()) {
+        for (FeatureElement featureElement : feature.getScenarios()) {
             if (featureElement instanceof ScenarioOutline) {
                 ScenarioOutline scenarioOutline = (ScenarioOutline) featureElement;
                 List<TestCase> caseResults = findExamplesCaseResult(fileResult, scenarioOutline);
@@ -48,13 +50,13 @@ public class ModelTestResultIntegrator {
         }
     }
 
-    private TestFile findFileResult(CucumberJsonWrapper cucumberJson, FeatureFile feature) {
+    private TestFile findFileResult(CucumberJsonWrapper cucumberJson, Feature feature) {
         for (TestFile testFile : cucumberJson.featuresResults) {
-            if (samePath(feature.getFilePath(), testFile.uri)) {
+            if (samePath(feature.getFeatureFileName(), testFile.uri)) {
                 return testFile;
             }
         }
-        logger.warning("No result found for feature " + feature.getFilePath() + " in");
+        logger.warning("No result found for feature " + feature.getFeatureFileName() + " in");
         for (TestFile testFile : cucumberJson.featuresResults) {
             logger.fine(testFile.uri);
         }
@@ -110,8 +112,18 @@ public class ModelTestResultIntegrator {
         return testCases;
     }
 
+    private TestResult findStepResuls(TestCase testCase, Step step) {
+        return testCase.steps.stream()
+                .filter(s -> s.line == step.getLocation().getLine() && s.name.equals(step.getText()))
+                .map(s -> s.result)
+                .findFirst().get();
+    }
+
     private void integrateBackgroundResults(TestCase caseResult, Background background) {
         background.setResult(convertResult(caseResult));
+        background.getSteps().forEach(s -> {
+            integrateStepResults(findStepResuls(caseResult, s), s);
+        });
     }
 
     private void integrateScenarioResults(TestCase caseResult, Scenario scenario) {
@@ -122,11 +134,25 @@ public class ModelTestResultIntegrator {
         scenarioOutline.setResult(convertResults(caseResult));
     }
 
+    private void integrateStepResults(TestResult testResult, Step step) {
+        step.setResult(convertResult(testResult));
+    }
+
     private Result convertResult(TestCase caseResult) {
         if (caseResult == null || !caseResult.isExecuted()) {
             return Result.IGNORED;
         }
         if (caseResult.isSuccessful()) {
+            return Result.PASSED;
+        }
+        return Result.FAILED;
+    }
+
+    private Result convertResult(TestResult testResult) {
+        if (testResult == null || testResult.status == null) {
+            return Result.IGNORED;
+        }
+        if(testResult.status.equals("PASSED")){
             return Result.PASSED;
         }
         return Result.FAILED;
@@ -144,10 +170,10 @@ public class ModelTestResultIntegrator {
             successful &= testCase.isSuccessful();
         }
 
-        if(!executed) {
+        if (!executed) {
             return Result.IGNORED;
         }
-        if(!successful) {
+        if (!successful) {
             return Result.FAILED;
         }
         return Result.PASSED;
