@@ -1,7 +1,7 @@
 package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
-import gin.cucumberjson.ModelTestResultIntegrator;
+import gin.cucumberjson.CucumberTestResultIntegrator;
 import gin.featuresjson.FeaturesJsonFactory;
 import gin.featuresjson.FeaturesJsonWrapper;
 import gin.featuresjson.TestResultSummarizer;
@@ -51,7 +51,7 @@ public class GinMojo extends AbstractMojo {
             if(resultFile != null && resultFile.isEmpty()) {
                 try {
                     CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(resultFile);
-                    new ModelTestResultIntegrator(featureSuite).integrateFromCucumberJson(testResult);
+                    new CucumberTestResultIntegrator(featureSuite).integrateFromCucumberJson(testResult);
                     logger.info("Integrated test results");
                 } catch (IOException e) {
                     logger.severe(e.getMessage());

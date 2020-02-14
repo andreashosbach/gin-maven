@@ -1,7 +1,7 @@
 package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
-import gin.cucumberjson.ModelTestResultIntegrator;
+import gin.cucumberjson.CucumberTestResultIntegrator;
 import gin.featuresjson.*;
 import gin.model.FeatureSuite;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class TestResultIntegratorTest {
         String resultFile = TestResultIntegratorTest.class.getResource("/featuresWithResults/cucumber.json").getFile();
         resultFile = resultFile.replaceFirst("/", "");
         CucumberJsonWrapper cucumberJson = CucumberJsonWrapper.fromFile(resultFile);
-        ModelTestResultIntegrator mIntegrator = new ModelTestResultIntegrator(featureSuite);
+        CucumberTestResultIntegrator mIntegrator = new CucumberTestResultIntegrator(featureSuite);
         mIntegrator.integrateFromCucumberJson(cucumberJson);
 
         FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);

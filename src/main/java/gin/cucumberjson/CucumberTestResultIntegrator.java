@@ -9,14 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static gin.model.Result.UNKNOWN;
-
-public class ModelTestResultIntegrator {
+public class CucumberTestResultIntegrator {
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     FeatureSuite featureSuite;
 
-    public ModelTestResultIntegrator(FeatureSuite featureSuite) {
+    public CucumberTestResultIntegrator(FeatureSuite featureSuite) {
         this.featureSuite = featureSuite;
     }
 
