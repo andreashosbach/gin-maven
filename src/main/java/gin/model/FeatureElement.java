@@ -1,7 +1,5 @@
 package gin.model;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +39,11 @@ public abstract class FeatureElement {
     }
 
     public List<Step> getSteps() {
-        return ImmutableList.copyOf(steps);
+        return steps;
     }
 
     public List<String> getTags() {
-        return ImmutableList.copyOf(tags);
+        return tags;
     }
 
     public Location getLocation(){

@@ -1,10 +1,8 @@
 package gin.model;
 
-import com.google.common.collect.ImmutableList;
 import io.cucumber.messages.Messages;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Example {
@@ -54,6 +52,6 @@ public class Example {
     }
 
     public List<Integer> getDataRowLines(){
-        return ImmutableList.copyOf(dataRowLines);
+        return dataRowLines;
     }
 }

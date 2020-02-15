@@ -48,7 +48,7 @@ public class GinMojo extends AbstractMojo {
             FeatureSuite featureSuite = FeatureSuite.fromPath(featureFiles);
             logger.info("Read feature files");
 
-            if(resultFile != null && resultFile.isEmpty()) {
+            if(resultFile != null && !resultFile.isEmpty()) {
                 try {
                     CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(resultFile);
                     new CucumberTestResultIntegrator(featureSuite).integrateFromCucumberJson(testResult);

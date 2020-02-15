@@ -1,6 +1,5 @@
 package gin.model;
 
-import com.google.common.collect.ImmutableList;
 import io.cucumber.messages.Messages;
 
 import java.util.ArrayList;
@@ -55,11 +54,11 @@ public class Feature {
     }
 
     public List<String> getTags(){
-        return ImmutableList.copyOf(tags);
+        return tags;
     }
 
     public List<FeatureElement> getScenarios(){
-        return ImmutableList.copyOf(scenarios);
+        return scenarios;
     }
 
     public String getLanguage() {

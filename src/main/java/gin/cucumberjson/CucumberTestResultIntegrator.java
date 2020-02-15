@@ -2,7 +2,6 @@ package gin.cucumberjson;
 
 import gin.model.*;
 
-import javax.print.DocFlavor;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -27,9 +26,10 @@ public class CucumberTestResultIntegrator {
 
     private void integrateFeatureResults(TestFile fileResult, Feature feature) {
         if (fileResult == null) {
+            logger.severe("Test result file for " + feature.getFeatureFileName() + " not found");
             return;
         }
-
+        logger.fine("Test results for " + feature.getFeatureFileName());
         if (feature.getBackground() != null) {
             TestCase caseResult = findBackgroundResult(fileResult, feature.getBackground());
             integrateBackgroundResults(caseResult, feature.getBackground());
@@ -110,7 +110,7 @@ public class CucumberTestResultIntegrator {
         return testCases;
     }
 
-    private TestResult findStepResuls(TestCase testCase, Step step) {
+    private TestResult findStepResults(TestCase testCase, Step step) {
         return testCase.steps.stream()
                 .filter(s -> s.line == step.getLocation().getLine() && s.name.equals(step.getText()))
                 .map(s -> s.result)
@@ -119,17 +119,23 @@ public class CucumberTestResultIntegrator {
 
     private void integrateBackgroundResults(TestCase caseResult, Background background) {
         background.setResult(convertResult(caseResult));
+        logger.fine("Test Result for background is " + background.getResult());
         background.getSteps().forEach(s -> {
-            integrateStepResults(findStepResuls(caseResult, s), s);
+            integrateStepResults(findStepResults(caseResult, s), s);
         });
     }
 
     private void integrateScenarioResults(TestCase caseResult, Scenario scenario) {
         scenario.setResult(convertResult(caseResult));
+        logger.fine("Test Result for " + scenario.getName() + " is " + scenario.getResult());
+        scenario.getSteps().forEach(s -> {
+            integrateStepResults(findStepResults(caseResult, s), s);
+        });
     }
 
     private void integrateScenarioOutlineResults(List<TestCase> caseResult, ScenarioOutline scenarioOutline) {
         scenarioOutline.setResult(convertResults(caseResult));
+        logger.fine("Test Result for " + scenarioOutline.getName() + " is " + scenarioOutline.getResult());
     }
 
     private void integrateStepResults(TestResult testResult, Step step) {

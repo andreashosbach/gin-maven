@@ -1,6 +1,5 @@
 package gin.model;
 
-import com.google.common.collect.ImmutableList;
 import io.cucumber.messages.Messages;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class ScenarioOutline extends FeatureElement {
     }
 
     public List<Example> getExamples() {
-        return ImmutableList.copyOf(examples);
+        return examples;
     }
 
     public void setResult(Result result){
