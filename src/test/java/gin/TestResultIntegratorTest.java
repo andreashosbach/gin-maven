@@ -1,11 +1,9 @@
 package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
-import gin.cucumberjson.TestResultIntegrator;
-import gin.featuresjson.Feature;
-import gin.featuresjson.FeatureFile;
-import gin.featuresjson.FeaturesJsonWrapper;
-import gin.featuresjson.Scenario;
+import gin.cucumberjson.CucumberTestResultIntegrator;
+import gin.featuresjson.*;
+import gin.model.FeatureSuite;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,15 +22,20 @@ public class TestResultIntegratorTest {
         //Given
         String featureDirectory = TestResultIntegratorTest.class.getResource("/featuresWithResults").getFile();
         featureDirectory = featureDirectory.replaceFirst("/", "");
+        FeatureSuite featureSuite = FeatureSuite.fromPath(featureDirectory);
 
-        FeaturesJsonWrapper featuresJson = FeaturesJsonWrapper.fromPath(featureDirectory);
         String resultFile = TestResultIntegratorTest.class.getResource("/featuresWithResults/cucumber.json").getFile();
         resultFile = resultFile.replaceFirst("/", "");
         CucumberJsonWrapper cucumberJson = CucumberJsonWrapper.fromFile(resultFile);
+        CucumberTestResultIntegrator mIntegrator = new CucumberTestResultIntegrator(featureSuite);
+        mIntegrator.integrateFromCucumberJson(cucumberJson);
+
+        FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
+        FeaturesJsonWrapper featuresJson = featuresJsonFactory.buildFeaturesJsonWrapper();
 
         //When
-        TestResultIntegrator integrator = new TestResultIntegrator(featuresJson);
-        integrator.integrateFromCucumberJson(cucumberJson);
+//        TestResultIntegrator integrator = new TestResultIntegrator(featuresJson);
+//        integrator.integrateFromCucumberJson(cucumberJson);
         //  System.out.println(featuresJson.asFeaturesJson());
         FeatureFile featureFile = featuresJson.Features.get(0);
 

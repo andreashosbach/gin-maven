@@ -1,9 +1,11 @@
 package gin;
 
 import gin.cucumberjson.CucumberJsonWrapper;
-import gin.cucumberjson.TestResultIntegrator;
+import gin.cucumberjson.CucumberTestResultIntegrator;
+import gin.featuresjson.FeaturesJsonFactory;
 import gin.featuresjson.FeaturesJsonWrapper;
 import gin.featuresjson.TestResultSummarizer;
+import gin.model.FeatureSuite;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -43,21 +45,29 @@ public class GinMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             setLogLevel();
-
-            FeaturesJsonWrapper fWrapper = FeaturesJsonWrapper.fromPath(featureFiles);
-            fWrapper.Configuration.SutName = project.getName();
-            fWrapper.Configuration.SutVersion = project.getVersion();
+            FeatureSuite featureSuite = FeatureSuite.fromPath(featureFiles);
             logger.info("Read feature files");
 
-            CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(resultFile);
-            new TestResultIntegrator(fWrapper).integrateFromCucumberJson(testResult);
+            if(resultFile != null && !resultFile.isEmpty()) {
+                try {
+                    CucumberJsonWrapper testResult = CucumberJsonWrapper.fromFile(resultFile);
+                    new CucumberTestResultIntegrator(featureSuite).integrateFromCucumberJson(testResult);
+                    logger.info("Integrated test results");
+                } catch (IOException e) {
+                    logger.severe(e.getMessage());
+                }
+            }
+
+            FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
+            FeaturesJsonWrapper fWrapper = featuresJsonFactory.buildFeaturesJsonWrapper();
+            fWrapper.Configuration.SutName = project.getName();
+            fWrapper.Configuration.SutVersion = project.getVersion();
             new TestResultSummarizer(fWrapper).summarize();
-            logger.info("Integrated test results");
 
             String featuresJson = fWrapper.asFeaturesJson();
             FileUtils.copyFromJar("html", Paths.get(outputDirectory));
             FileUtils.saveToFile(featuresJson, outputDirectory + File.separator + "html" + File.separator + "features.js");
-            logger.info("Succefully wrote output to: '" + outputDirectory + "'");
+            logger.info("Successfully wrote output to: '" + outputDirectory + "'");
 
             System.out.println("Generated Living Documentation at: '" + outputDirectory + File.separator + "html'");
         } catch (IOException | URISyntaxException e) {

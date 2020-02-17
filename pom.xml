@@ -6,7 +6,7 @@
 
     <groupId>com.github.andreashosbach</groupId>
     <artifactId>gin-maven-plugin</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>Gherkin-Interpreted-Nicely</name>
