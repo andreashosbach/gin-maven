@@ -1,5 +1,6 @@
 package gin.featuresjson;
 
+import gin.OutputFormatFactory;
 import gin.model.FeatureElement;
 import gin.model.FeatureSuite;
 import gin.model.ScenarioOutline;
@@ -11,20 +12,45 @@ import java.util.UUID;
 
 import static gin.model.Result.*;
 
-public class FeaturesJsonFactory {
+public class FeaturesJsonFactory implements OutputFormatFactory {
     private FeatureSuite featureSuite;
 
     public FeaturesJsonFactory(FeatureSuite featureSuite) {
         this.featureSuite = featureSuite;
     }
 
-    public FeaturesJsonWrapper buildFeaturesJsonWrapper() {
-        FeaturesJsonWrapper jsonWrapper = new FeaturesJsonWrapper();
+    public static Example createExample(gin.model.Example example) {
+        Example pExample = new Example();
+        pExample.Name = example.getName();
+        pExample.TableArgument = new Example.TableArgument();
+        pExample.Tags = new ArrayList<>();
+        example.getTags().stream().forEachOrdered(t -> pExample.Tags.add(t));
+        pExample.NativeKeyword = example.getKeyword().trim();
+
+        pExample.TableArgument.HeaderRow = new ArrayList<>();
+
+        example.getHeaders().stream().forEachOrdered(c -> pExample.TableArgument.HeaderRow.add(c));
+
+        pExample.TableArgument.DataRows = new ArrayList<>();
+        pExample.TableArgument.DataRowLines = new ArrayList<>();
+        example.getDataRows().stream().forEachOrdered((row) ->
+        {
+            List<String> pRow = new ArrayList<>();
+            row.stream().forEachOrdered(c -> pRow.add(c));
+            pExample.TableArgument.DataRows.add(pRow);
+        });
+        example.getDataRowLines().stream().forEachOrdered(l -> pExample.TableArgument.DataRowLines.add(l));
+
+        return pExample;
+    }
+
+    public FeaturesJsonOutputGenerator buildOutputGenerator() {
+        FeaturesJsonOutputGenerator jsonWrapper = new FeaturesJsonOutputGenerator();
         jsonWrapper.Features = new ArrayList<>();
 
         featureSuite.getFeatures().stream().forEachOrdered(f -> jsonWrapper.Features.add(createFeatureFile(f)));
 
-        jsonWrapper.Configuration = gin.featuresjson.Configuration.create("GIN", "1.0");
+        jsonWrapper.Configuration = gin.featuresjson.Configuration.create(featureSuite.getApplicationName(), featureSuite.getApplicationVersion());
 
         jsonWrapper.Summary = new Summary();
         jsonWrapper.Summary.Features = ResultSummary.create(jsonWrapper.Features.size(), 0, 0, 0);
@@ -105,31 +131,6 @@ public class FeaturesJsonFactory {
         pStep.AfterLastStepComments = new ArrayList<>();
         pStep.Name = step.getText();
         return pStep;
-    }
-
-    public static Example createExample(gin.model.Example example) {
-        Example pExample = new Example();
-        pExample.Name = example.getName();
-        pExample.TableArgument = new Example.TableArgument();
-        pExample.Tags = new ArrayList<>();
-        example.getTags().stream().forEachOrdered(t -> pExample.Tags.add(t));
-        pExample.NativeKeyword = example.getKeyword().trim();
-
-        pExample.TableArgument.HeaderRow = new ArrayList<>();
-
-        example.getHeaders().stream().forEachOrdered(c -> pExample.TableArgument.HeaderRow.add(c));
-
-        pExample.TableArgument.DataRows = new ArrayList<>();
-        pExample.TableArgument.DataRowLines = new ArrayList<>();
-        example.getDataRows().stream().forEachOrdered((row) ->
-        {
-            List<String> pRow = new ArrayList<>();
-            row.stream().forEachOrdered(c -> pRow.add(c));
-            pExample.TableArgument.DataRows.add(pRow);
-        });
-        example.getDataRowLines().stream().forEachOrdered(l -> pExample.TableArgument.DataRowLines.add(l));
-
-        return pExample;
     }
 
     private Result createResult(gin.model.Result result) {

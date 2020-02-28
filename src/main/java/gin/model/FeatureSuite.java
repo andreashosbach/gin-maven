@@ -49,28 +49,27 @@ public class FeatureSuite {
         return basePath;
     }
 
-    public void setApplicationName(String applicationName){
-        this.applicationName = applicationName;
-    }
-
-    public String getApplicationName(){
+    public String getApplicationName() {
         return applicationName;
     }
 
-    public void setApplicationVersion(String applicationVersion){
-        this.applicationVersion = applicationVersion;
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
-    public String getApplicationVersion(){
+    public String getApplicationVersion() {
         return applicationVersion;
     }
 
-    public List<Feature> getFeatures(){
+    public void setApplicationVersion(String applicationVersion) {
+        this.applicationVersion = applicationVersion;
+    }
+
+    public List<Feature> getFeatures() {
         return features;
     }
 
-    public Feature getFeature(String name){
+    public Feature getFeature(String name) {
         return features.stream().filter(f -> name.equals(f.getName())).findFirst().get();
     }
-
 }

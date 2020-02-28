@@ -30,10 +30,6 @@ public abstract class FeatureElement {
         steps.add(step);
     }
 
-    protected void setLocation(Location location) {
-        this.location = location;
-    }
-
     protected void addTag(String tag) {
         tags.add(tag);
     }
@@ -46,10 +42,21 @@ public abstract class FeatureElement {
         return tags;
     }
 
-    public Location getLocation(){
+    public Location getLocation() {
         return location;
+    }
+
+    protected void setLocation(Location location) {
+        this.location = location;
     }
 
     public abstract Result getResult();
 
+    public boolean hasExamples() {
+        return getExamples() != null && !getExamples().isEmpty();
+    }
+
+    public List<Example> getExamples() {
+        return null;
+    }
 }

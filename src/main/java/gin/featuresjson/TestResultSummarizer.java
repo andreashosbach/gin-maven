@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 public class TestResultSummarizer {
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    private FeaturesJsonWrapper fWrapper;
+    private FeaturesJsonOutputGenerator fWrapper;
     private Map<String, TagResultSummary> tagResults = new HashMap<>();
     private Map<String, FolderResultSummary> folderResults = new HashMap<>();
 
-    public TestResultSummarizer(FeaturesJsonWrapper fWrapper) {
+    public TestResultSummarizer(FeaturesJsonOutputGenerator fWrapper) {
         this.fWrapper = fWrapper;
     }
 

@@ -3,20 +3,25 @@ package gin.featuresjson;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gin.FileUtils;
+import gin.OutputFormatGenerator;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Logger;
 
 //@JsonIgnoreProperties(ignoreUnknown = true)
-public class FeaturesJsonWrapper {
+public class FeaturesJsonOutputGenerator implements OutputFormatGenerator {
     public List<FeatureFile> Features;
     public Summary Summary;
     public Configuration Configuration;
     @JsonIgnore
     public String basePath;
+
+    FeaturesJsonOutputGenerator() {
+    }
 
     public String asFeaturesJson() {
         ObjectMapper mapper = new ObjectMapper();
@@ -32,6 +37,14 @@ public class FeaturesJsonWrapper {
 
     public String getBasePath() {
         return basePath;
+    }
+
+    public void writeOutput(String outputDirectory) throws IOException, URISyntaxException {
+        new TestResultSummarizer(this).summarize();
+
+        String featuresJson = asFeaturesJson();
+        FileUtils.copyFromJar("html", Paths.get(outputDirectory));
+        FileUtils.saveToFile(featuresJson, outputDirectory + File.separator + "html" + File.separator + "features.js");
     }
 }
 

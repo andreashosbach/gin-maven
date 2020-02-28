@@ -3,7 +3,6 @@ package gin.model;
 import io.cucumber.messages.Messages;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ScenarioOutline extends FeatureElement {
@@ -25,11 +24,11 @@ public class ScenarioOutline extends FeatureElement {
         return examples;
     }
 
-    public void setResult(Result result){
-        this.result = result;
-    }
-    public Result getResult(){
+    public Result getResult() {
         return result;
     }
 
+    public void setResult(Result result) {
+        this.result = result;
+    }
 }

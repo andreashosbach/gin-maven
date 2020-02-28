@@ -31,7 +31,7 @@ public class TestResultIntegratorTest {
         mIntegrator.integrateFromCucumberJson(cucumberJson);
 
         FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
-        FeaturesJsonWrapper featuresJson = featuresJsonFactory.buildFeaturesJsonWrapper();
+        FeaturesJsonOutputGenerator featuresJson = featuresJsonFactory.buildOutputGenerator();
 
         //When
 //        TestResultIntegrator integrator = new TestResultIntegrator(featuresJson);

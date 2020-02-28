@@ -13,22 +13,24 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FeaturesJsonWrapperTest {
+class FeaturesJsonOutputGeneratorTest {
     @Test
     public void testFromPath() throws IOException {
         // Given
-        String featureDirectory = FeaturesJsonWrapperTest.class.getResource("/features").getFile();
+        String featureDirectory = FeaturesJsonOutputGeneratorTest.class.getResource("/features").getFile();
         featureDirectory = featureDirectory.replaceFirst("/", "");
         FeatureSuite featureSuite = FeatureSuite.fromPath(featureDirectory);
+        featureSuite.setApplicationName("GIN");
+        featureSuite.setApplicationVersion("1.0");
         FeaturesJsonFactory featuresJsonFactory = new FeaturesJsonFactory(featureSuite);
 
         // When
-        FeaturesJsonWrapper featuresJson = featuresJsonFactory.buildFeaturesJsonWrapper();
+        FeaturesJsonOutputGenerator featuresJson = featuresJsonFactory.buildOutputGenerator();
 
         // Then
         assertEquals(6, featuresJson.Features.size());
         String[] actualLines = featuresJson.asFeaturesJson().split("\n");
-        String filename = FeaturesJsonWrapperTest.class.getResource("/features.js").getFile();
+        String filename = FeaturesJsonOutputGeneratorTest.class.getResource("/features.js").getFile();
         filename = filename.replaceFirst("/", "");
         List<String> expectedLines = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(filename), StandardCharsets.UTF_8)) {

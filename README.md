@@ -43,7 +43,7 @@ Simply add the plugin to your pom:
 
 * **Andreas Hosbach** - *Initial work* - [andreashosbach](https://github.com/andreashosbach)
 
-See also the list of [contributors](https://github.com/andreashosbach/gin/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/andreashosbach/gin-maven/contributors) who participated in this project.
 
 ## License
 
