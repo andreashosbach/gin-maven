@@ -119,6 +119,7 @@ public class CucumberTestResultIntegrator {
 
     private void integrateBackgroundResults(TestCase caseResult, Background background) {
         background.setResult(convertResult(caseResult));
+        background.setStartTime(caseResult.start_timestamp);
         logger.fine("Test Result for background is " + background.getResult());
         background.getSteps().forEach(s -> {
             integrateStepResults(findStepResults(caseResult, s), s);
@@ -127,6 +128,7 @@ public class CucumberTestResultIntegrator {
 
     private void integrateScenarioResults(TestCase caseResult, Scenario scenario) {
         scenario.setResult(convertResult(caseResult));
+        scenario.setStartTime(caseResult.start_timestamp);
         logger.fine("Test Result for " + scenario.getName() + " is " + scenario.getResult());
         scenario.getSteps().forEach(s -> {
             integrateStepResults(findStepResults(caseResult, s), s);
@@ -135,6 +137,9 @@ public class CucumberTestResultIntegrator {
 
     private void integrateScenarioOutlineResults(List<TestCase> caseResult, ScenarioOutline scenarioOutline) {
         scenarioOutline.setResult(convertResults(caseResult));
+        if(caseResult.size() > 0) {
+            scenarioOutline.setStartTime(caseResult.get(0).start_timestamp);
+        }
         logger.fine("Test Result for " + scenarioOutline.getName() + " is " + scenarioOutline.getResult());
     }
 

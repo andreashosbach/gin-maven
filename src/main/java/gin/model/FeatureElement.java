@@ -7,6 +7,7 @@ public abstract class FeatureElement {
     private String name;
     private String description;
     private Location location;
+    private String time;
     private List<String> tags = new ArrayList<>();
     private List<Step> steps = new ArrayList<>();
 
@@ -58,5 +59,13 @@ public abstract class FeatureElement {
 
     public List<Example> getExamples() {
         return null;
+    }
+
+    public void setStartTime(String time){
+        this.time = time;
+    }
+
+    public String getTime(){
+        return time;
     }
 }

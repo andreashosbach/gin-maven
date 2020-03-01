@@ -14,8 +14,12 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.logging.Logger;
 
 public class ScenariooOutputGenerator implements OutputFormatGenerator {
+    private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
     private FeatureSuite featureSuite;
     private ScenarioDocuWriter writer;
 
@@ -27,9 +31,11 @@ public class ScenariooOutputGenerator implements OutputFormatGenerator {
         if (Files.notExists(Paths.get(outputDirectory))) {
             Files.createDirectory(Paths.get(outputDirectory));
         }
+
         writer = new ScenarioDocuWriter(new File(outputDirectory), featureSuite.getApplicationName(), featureSuite.getApplicationVersion());
 
-        featureSuite.getFeatures().forEach(this::mapFeature);
+        mapFeatureSuite(featureSuite);
+
         try {
             writer.flush();
         } catch (ScenarioDocuSaveException e) {
@@ -38,6 +44,22 @@ public class ScenariooOutputGenerator implements OutputFormatGenerator {
             e.printStackTrace();
             Arrays.asList(e.getSuppressed()).forEach(System.out::println);
         }
+    }
+
+    private void mapFeatureSuite(FeatureSuite featureSuite) {
+        Branch sBranch = new Branch();
+        sBranch.setName(featureSuite.getApplicationName());
+
+        Build sBuild = new Build();
+        sBuild.setDate(new Date());
+        sBuild.setRevision(featureSuite.getApplicationVersion());
+        sBuild.setName(featureSuite.getApplicationVersion());
+
+
+        featureSuite.getFeatures().forEach(this::mapFeature);
+
+        writer.saveBranchDescription(sBranch);
+        writer.saveBuildDescription(sBuild);
     }
 
     private void mapFeature(Feature gFeature) {
@@ -57,20 +79,29 @@ public class ScenariooOutputGenerator implements OutputFormatGenerator {
         featureElement.getTags().forEach(sScenario::addLabel);
         sScenario.setStatus(convertResult(featureElement.getResult()));
         writer.saveScenario(sUseCase, sScenario);
-        featureElement.getSteps().forEach(s -> mapStep(sUseCase, sScenario, s));
+        for (int i = 0; i < featureElement.getSteps().size(); i++) {
+            mapStep(sUseCase, sScenario, featureElement.getSteps().get(i), i);
+        }
     }
 
-    private void mapStep(UseCase sUseCase, Scenario sScenario, Step gStep) {
+    private void mapStep(UseCase sUseCase, Scenario sScenario, Step gStep, int index) {
         org.scenarioo.model.docu.entities.Step sStep = new org.scenarioo.model.docu.entities.Step();
-        sStep.setHtml(new StepHtml(createStepHtml(gStep)));
         StepDescription sStepDescription = new StepDescription();
+        sStepDescription.setIndex(index);
         sStepDescription.setTitle(gStep.getKeyword().trim() + " " + gStep.getText());
         sStep.setStepDescription(sStepDescription);
         writer.saveStep(sUseCase, sScenario, sStep);
+     //   writer.saveScreenshotAsPng(sUseCase.getName(), sScenario.getName(), index, readImage(""));
     }
 
-    private String createStepHtml(Step gStep) {
-        return "<b>" + gStep.getKeyword() + "</b>" + gStep.getText();
+    private byte[] readImage(String filename) {
+        try {
+            File fi = new File("placeholder.png");
+            return Files.readAllBytes(fi.toPath());
+        } catch (IOException e) {
+            logger.severe("Image file not found " + filename);
+            return null;
+        }
     }
 
     private Status convertResult(Result result) {
